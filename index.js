@@ -1,4 +1,4 @@
-const { ApolloServer, makeExecutableSchema } = require('apollo-server');
+const { ApolloServer, makeExecutableSchema } = require('apollo-server-micro');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
 
@@ -12,10 +12,8 @@ const server = new ApolloServer({
   context: async () => {
     // TODO - прокинуть юзера
   },
-});
-
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
+  introspection: true,
+  playground: true,
 });
 
 module.exports = server.createHandler();
