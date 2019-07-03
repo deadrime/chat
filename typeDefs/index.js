@@ -5,6 +5,7 @@ const user = require('./user');
 const query = require('./query');
 const mutation = require('./mutation');
 const subscription = require('./subscription');
+const directives = require('./directives');
 
 // const types = readdirSync(__dirname)
 //   .filter(f => f !== 'index.js')
@@ -17,4 +18,5 @@ module.exports = [
   query,
   mutation,
   subscription,
-]
+  directives,
+];
