@@ -1,4 +1,4 @@
-const { pubsub, NEW_MESSAGE } = require('../utils/pubSub');
+const { pubsub, NEW_MESSAGE, UPDATE } = require('../utils/pubSub');
 const { withFilter } = require('graphql-subscriptions');
 const { User, Chat } = require('../models');
 const register = require('./register');
@@ -11,9 +11,10 @@ const getChatMessages = require('./getChatMessages');
 
 const resolvers = {
   Subscription: {
-    messages: {
+    newMessage: {
       subscribe: withFilter(() => pubsub.asyncIterator(NEW_MESSAGE), (payload, variables, context, info) => {
-        return payload.message.chat === variables.chatId
+        console.log(variables.chatIds.includes(payload.newMessage.chat))
+        return variables.chatIds.includes(payload.newMessage.chat)
       }),
     },
   },
@@ -31,13 +32,14 @@ const resolvers = {
   },
   Message: {
     chat: ({ chatId }) => Chat.findById(chatId),
+    chatId: ({ chat })  => chat,
     createdAt: ({ createdAt }) => new Date(createdAt).valueOf(),
   },
   Chat: {
     creator: ({ creator }) => User.findById(creator),
     members: ({ id }) => Chat.findById(id).populate('members').then(chat => chat.members),
     messages: getChatMessages,
-  }
+  },
 };
 
 module.exports = resolvers;

@@ -4,5 +4,5 @@ const NEW_MESSAGE = 'new_message';
 
 module.exports = {
   pubsub,
-  NEW_MESSAGE
+  NEW_MESSAGE,
 }

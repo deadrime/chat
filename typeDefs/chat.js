@@ -6,7 +6,7 @@ const Chat = gql`
     title: String!
     creator: User
     members: [User]
-    messages(lastId: ID): [Message]
+    messages(lastId: ID, limit: Int): [Message]
   }
 `;
 

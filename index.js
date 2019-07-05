@@ -13,19 +13,19 @@ const schema = makeExecutableSchema({
 });
 
 const server = new ApolloServer({
+  cors: true,
   schema,
   context: addContext,
   subscriptions: {
     onConnect: async (connectionParams) => {
-      const token = connectionParams.Authorization && connectionParams.Authorization.split('Bearer ')[1]
-      
+      const token = connectionParams.authToken
       if (!token) throw new Error('No token provided');
       const payload = await jwt.verify(token, 'some_app_secret')
       const user = await User.findById(payload.id)
       if (!user) throw new Error('Auth error')
 
-      return { 
-        user 
+      return {
+        user
       };
     },
   },
@@ -39,18 +39,18 @@ mongoose.connection.on('open', () => {
   });
 })
 
-async function addContext ({ req, connection }, ...args) {
+async function addContext({ req, connection }, ...args) {
   if (connection) {
     return connection.context
   } else {
     const token = req.headers.authorization && req.headers.authorization.split('Bearer ')[1]
-    
+
     if (token) {
       const payload = await jwt.verify(token, 'some_app_secret')
       const user = await User.findById(payload.id)
 
-      return { 
-        user 
+      return {
+        user
       };
     }
   }
