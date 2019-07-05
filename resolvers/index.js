@@ -1,4 +1,4 @@
-const { pubsub, NEW_MESSAGE, UPDATE } = require('../utils/pubSub');
+const { pubsub, NEW_MESSAGE } = require('../utils/pubSub');
 const { withFilter } = require('graphql-subscriptions');
 const { User, Chat } = require('../models');
 const register = require('./register');
@@ -13,7 +13,7 @@ const resolvers = {
   Subscription: {
     newMessage: {
       subscribe: withFilter(() => pubsub.asyncIterator(NEW_MESSAGE), (payload, variables, context, info) => {
-        console.log(variables.chatIds.includes(payload.newMessage.chat))
+        // console.log(variables.chatIds.includes(payload.newMessage.chat))
         return variables.chatIds.includes(payload.newMessage.chat)
       }),
     },
