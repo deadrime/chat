@@ -7,7 +7,8 @@ const Message = gql`
     from: User!
     chatId: ID!
     chat: Chat!
+    createdAt: Float
   }
-`
+`;
 
 module.exports = Message;
